@@ -39,6 +39,6 @@ phpunit
 
 ## À faire
 
-[] Ajouter les tests manquants dans AssertionActionServiceTest (que se passe-t-il si vous supprimez un "if")
-[] Refactoriser validateMandatoryClaims (supprimer la duplication)
-[] Refactoriser getAssertionActionResponse
+- [ ] Ajouter les tests manquants dans AssertionActionServiceTest (que se passe-t-il si vous supprimez un "if")
+- [ ] Refactoriser validateMandatoryClaims (supprimer la duplication)
+- [ ] Refactoriser getAssertionActionResponse

@@ -20,5 +20,5 @@
 
 ## Rules
 
-[] la couverture de test doit être à 100% et les chemins d'execution vérifiés
-[] La lisibilité du code doit être améliorée
+- [ ] la couverture de test doit être à 100% et les chemins d'execution vérifiés
+- [ ] La lisibilité du code doit être améliorée
