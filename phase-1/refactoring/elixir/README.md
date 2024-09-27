@@ -19,6 +19,6 @@ Installez les dépendances :
 
 ## À faire
 
-[] Ajouter les tests manquants dans AssertionActionServiceTest (que se passe-t-il si vous supprimez un "if")
-[] Refactoriser validate_mandatory_claims (supprimer la duplication)
-[] Refactoriser get_assertion_action_response
+- [ ] Ajouter les tests manquants dans AssertionActionServiceTest (que se passe-t-il si vous supprimez un "if")
+- [ ] Refactoriser validate_mandatory_claims (supprimer la duplication)
+- [ ] Refactoriser get_assertion_action_response
