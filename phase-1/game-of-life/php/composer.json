@@ -1,0 +1,26 @@
+{
+    "name": "php/game-of-life",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "GameOfLife\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GameOfLife\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "e.conrardy"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "scripts": {
+        "start": "php src/index.php",
+        "test": "phpunit tests"
+    }
+}
