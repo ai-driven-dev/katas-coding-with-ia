@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainOffice", "app\TrainOffice\TrainOffice.csproj", "{D0BD6982-7AFA-44C6-9681-019FA925911D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainOffice.Tests", "tests\TrainOffice.Tests\TrainOffice.Tests.csproj", "{31BE349F-3D77-4B06-8EF0-FCC22EB0A64A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{501B1A8A-DAAC-4D4D-AD22-F40B9DC99030}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		export-files-structure.ps1 = export-files-structure.ps1
+		project_structure.txt = project_structure.txt
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0BD6982-7AFA-44C6-9681-019FA925911D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0BD6982-7AFA-44C6-9681-019FA925911D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0BD6982-7AFA-44C6-9681-019FA925911D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0BD6982-7AFA-44C6-9681-019FA925911D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31BE349F-3D77-4B06-8EF0-FCC22EB0A64A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31BE349F-3D77-4B06-8EF0-FCC22EB0A64A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31BE349F-3D77-4B06-8EF0-FCC22EB0A64A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31BE349F-3D77-4B06-8EF0-FCC22EB0A64A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D083BA83-D134-4BC9-8A06-778CF8872DCC}
+	EndGlobalSection
+EndGlobal
