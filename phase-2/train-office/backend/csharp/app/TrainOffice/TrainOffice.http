@@ -1,0 +1,6 @@
+@TrainOffice_HostAddress = https://localhost:7288
+
+GET {{TrainOffice_HostAddress}}/api/weatherforecast/
+Accept: application/json
+
+###
