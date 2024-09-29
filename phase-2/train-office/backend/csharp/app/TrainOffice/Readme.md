@@ -21,3 +21,17 @@ dotnet ef database update
 ```sh
 dotnet ef migrations list
 ```
+
+## Openapi.json generation
+
+Install Nswag.ConsoleCore
+
+```sh
+dotnet tool install --global Nswag.ConsoleCore
+```
+
+Run nswag command:
+
+```sh
+nswag run .\nswag.json
+```
