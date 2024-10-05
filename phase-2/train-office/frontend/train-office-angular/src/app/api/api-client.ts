@@ -8,107 +8,133 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class WeatherForecastClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
+import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
+import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+
+export module ApiModule {
+export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
+
+@Injectable()
+export class Client {
+    private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "http://localhost:5000";
     }
 
-    getWeatherForecast(): Promise<ApiResponseOfIEnumerableOfWeatherForecast> {
+    weatherForecast_GetWeatherForecast(): Observable<ApiResponseOfIEnumerableOfWeatherForecast> {
         let url_ = this.baseUrl + "/api/WeatherForecast";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
                 "Accept": "application/json"
-            }
+            })
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetWeatherForecast(_response);
-        });
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processWeatherForecast_GetWeatherForecast(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processWeatherForecast_GetWeatherForecast(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApiResponseOfIEnumerableOfWeatherForecast>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApiResponseOfIEnumerableOfWeatherForecast>;
+        }));
     }
 
-    protected processGetWeatherForecast(response: Response): Promise<ApiResponseOfIEnumerableOfWeatherForecast> {
+    protected processWeatherForecast_GetWeatherForecast(response: HttpResponseBase): Observable<ApiResponseOfIEnumerableOfWeatherForecast> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = ApiResponseOfIEnumerableOfWeatherForecast.fromJS(resultData200);
-            return result200;
-            });
+            return _observableOf(result200);
+            }));
         } else if (status === 500) {
-            return response.text().then((_responseText) => {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result500: any = null;
             let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result500 = ApiResponseOfErrorResponse.fromJS(resultData500);
             return throwException("A server side error occurred.", status, _responseText, _headers, result500);
-            });
+            }));
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+            }));
         }
-        return Promise.resolve<ApiResponseOfIEnumerableOfWeatherForecast>(null as any);
-    }
-}
-
-export class TrainsClient {
-    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-        this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+        return _observableOf<ApiResponseOfIEnumerableOfWeatherForecast>(null as any);
     }
 
-    getTrains(): Promise<GetTrainsDto[]> {
+    trains_GetTrains(): Observable<ApiResponseOfIEnumerableOfGetTrainsDto> {
         let url_ = this.baseUrl + "/api/Trains";
         url_ = url_.replace(/[?&]$/, "");
 
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
                 "Accept": "application/json"
-            }
+            })
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetTrains(_response);
-        });
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTrains_GetTrains(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTrains_GetTrains(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApiResponseOfIEnumerableOfGetTrainsDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApiResponseOfIEnumerableOfGetTrainsDto>;
+        }));
     }
 
-    protected processGetTrains(response: Response): Promise<GetTrainsDto[]> {
+    protected processTrains_GetTrains(response: HttpResponseBase): Observable<ApiResponseOfIEnumerableOfGetTrainsDto> {
         const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return response.text().then((_responseText) => {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(GetTrainsDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
+            result200 = ApiResponseOfIEnumerableOfGetTrainsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = ApiResponseOfErrorResponse.fromJS(resultData500);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
         } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+            }));
         }
-        return Promise.resolve<GetTrainsDto[]>(null as any);
+        return _observableOf<ApiResponseOfIEnumerableOfGetTrainsDto>(null as any);
     }
 }
 
@@ -128,17 +154,17 @@ export class ApiResponseOfIEnumerableOfWeatherForecast implements IApiResponseOf
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["data"])) {
+            if (Array.isArray(_data["Data"])) {
                 this.data = [] as any;
-                for (let item of _data["data"])
+                for (let item of _data["Data"])
                     this.data!.push(WeatherForecast.fromJS(item));
             }
-            if (Array.isArray(_data["errors"])) {
+            if (Array.isArray(_data["Errors"])) {
                 this.errors = [] as any;
-                for (let item of _data["errors"])
+                for (let item of _data["Errors"])
                     this.errors!.push(ApiError.fromJS(item));
             }
-            this.meta = _data["meta"] ? Meta.fromJS(_data["meta"]) : <any>undefined;
+            this.meta = _data["Meta"] ? Meta.fromJS(_data["Meta"]) : <any>undefined;
         }
     }
 
@@ -152,16 +178,16 @@ export class ApiResponseOfIEnumerableOfWeatherForecast implements IApiResponseOf
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         if (Array.isArray(this.data)) {
-            data["data"] = [];
+            data["Data"] = [];
             for (let item of this.data)
-                data["data"].push(item.toJSON());
+                data["Data"].push(item.toJSON());
         }
         if (Array.isArray(this.errors)) {
-            data["errors"] = [];
+            data["Errors"] = [];
             for (let item of this.errors)
-                data["errors"].push(item.toJSON());
+                data["Errors"].push(item.toJSON());
         }
-        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["Meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -328,13 +354,13 @@ export class ApiResponseOfErrorResponse implements IApiResponseOfErrorResponse {
 
     init(_data?: any) {
         if (_data) {
-            this.data = _data["data"] ? ErrorResponse.fromJS(_data["data"]) : <any>undefined;
-            if (Array.isArray(_data["errors"])) {
+            this.data = _data["Data"] ? ErrorResponse.fromJS(_data["Data"]) : <any>undefined;
+            if (Array.isArray(_data["Errors"])) {
                 this.errors = [] as any;
-                for (let item of _data["errors"])
+                for (let item of _data["Errors"])
                     this.errors!.push(ApiError.fromJS(item));
             }
-            this.meta = _data["meta"] ? Meta.fromJS(_data["meta"]) : <any>undefined;
+            this.meta = _data["Meta"] ? Meta.fromJS(_data["Meta"]) : <any>undefined;
         }
     }
 
@@ -347,13 +373,13 @@ export class ApiResponseOfErrorResponse implements IApiResponseOfErrorResponse {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["Data"] = this.data ? this.data.toJSON() : <any>undefined;
         if (Array.isArray(this.errors)) {
-            data["errors"] = [];
+            data["Errors"] = [];
             for (let item of this.errors)
-                data["errors"].push(item.toJSON());
+                data["Errors"].push(item.toJSON());
         }
-        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["Meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -392,6 +418,66 @@ export class ErrorResponse implements IErrorResponse {
 }
 
 export interface IErrorResponse {
+}
+
+export class ApiResponseOfIEnumerableOfGetTrainsDto implements IApiResponseOfIEnumerableOfGetTrainsDto {
+    data?: GetTrainsDto[] | undefined;
+    errors?: ApiError[] | undefined;
+    meta?: Meta | undefined;
+
+    constructor(data?: IApiResponseOfIEnumerableOfGetTrainsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["Data"])) {
+                this.data = [] as any;
+                for (let item of _data["Data"])
+                    this.data!.push(GetTrainsDto.fromJS(item));
+            }
+            if (Array.isArray(_data["Errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["Errors"])
+                    this.errors!.push(ApiError.fromJS(item));
+            }
+            this.meta = _data["Meta"] ? Meta.fromJS(_data["Meta"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ApiResponseOfIEnumerableOfGetTrainsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiResponseOfIEnumerableOfGetTrainsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["Data"] = [];
+            for (let item of this.data)
+                data["Data"].push(item.toJSON());
+        }
+        if (Array.isArray(this.errors)) {
+            data["Errors"] = [];
+            for (let item of this.errors)
+                data["Errors"].push(item.toJSON());
+        }
+        data["Meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IApiResponseOfIEnumerableOfGetTrainsDto {
+    data?: GetTrainsDto[] | undefined;
+    errors?: ApiError[] | undefined;
+    meta?: Meta | undefined;
 }
 
 export class GetTrainsDto implements IGetTrainsDto {
@@ -598,9 +684,27 @@ export class ApiException extends Error {
     }
 }
 
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
     if (result !== null && result !== undefined)
-        throw result;
+        return _observableThrow(result);
     else
-        throw new ApiException(message, status, response, headers, null);
+        return _observableThrow(new ApiException(message, status, response, headers, null));
+}
+
+function blobToText(blob: any): Observable<string> {
+    return new Observable<string>((observer: any) => {
+        if (!blob) {
+            observer.next("");
+            observer.complete();
+        } else {
+            let reader = new FileReader();
+            reader.onload = event => {
+                observer.next((event.target as any).result);
+                observer.complete();
+            };
+            reader.readAsText(blob);
+        }
+    });
+}
+
 }

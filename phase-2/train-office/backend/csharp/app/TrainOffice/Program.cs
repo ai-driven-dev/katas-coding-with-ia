@@ -19,11 +19,14 @@ builder.Services.AddOpenApiDocument(config =>
     config.Title = "My API";
     config.Version = "v1";
 });
+
 var configuration = builder.Configuration;
 
 builder.Services.AddPersistences(configuration);
 builder.Services.AddApplications();
 builder.Services.AddControllers();
+builder.Services.AddTrainOfficeCors(configuration);
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -45,7 +48,7 @@ app.UseRouting();
 app.UseCustomMiddlewares();
 
 app.MapControllers();
-
+app.UseCors(configuration["CORS:PolicyName"]);
 app.Run();
 
 // needed for use WebApplicationFactory in http tests
