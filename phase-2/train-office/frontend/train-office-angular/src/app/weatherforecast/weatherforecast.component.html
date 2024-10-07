@@ -1,0 +1,19 @@
+<div class="weather-forecast">
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <div *ngIf="forecasts.length > 0">
+    <h2>Weather Forecast</h2>
+    <ul>
+      <li *ngFor="let forecast of forecasts">
+        <strong>Date:</strong> {{ forecast.date | date: 'longDate' }}<br>
+        <strong>Temperature (C):</strong> {{ forecast.temperatureC }}°C<br>
+        <strong>Temperature (F):</strong> {{ forecast.temperatureF }}°F<br>
+        <strong>Summary:</strong> {{ forecast.summary }}<br>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="forecasts.length === 0 && !error">
+    <p>No forecasts available.</p>
+  </div>
+</div>

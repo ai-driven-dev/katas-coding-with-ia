@@ -24,57 +24,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
+## Generate the api proxy
+
+Run `npm run generate-api-client` to generate the `api-client.ts` from `openapi.json`
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-## Proxy Configuration
-
-To avoid CORS issues during development, set up a proxy configuration:
-
-1. Create a file named `proxy.conf.json` in the project root:
-
-    ```json
-    {
-      "/api": {
-        "target": "<https://localhost:5000>",
-        "secure": false
-      }
-    }
-    ```
-
-2. Update the `angular.json` file to use the proxy configuration:
-
-    ```json
-    "architect": {
-      "serve": {
-        "options": {
-          "proxyConfig": "proxy.conf.json"
-        }
-      }
-    }
-    ```
-
-## API Client Generation
-
-To generate TypeScript clients for the backend API:
-
-1. Install NSwag:
-
-    ```sh
-    npm install -g nswag
-    ```
-
-2. Add a script to `package.json` for generating the API client:
-
-    ```json
-    "scripts": {
-      "generate-api-client": "nswag openapi2tsclient /input:../api/openapi.json /output:src/app/api/api-client.ts"
-    }
-    ```
-
-3. Run the script to generate the API client:
-
-    ```sh
-    npm run generate-api-client
-    ```

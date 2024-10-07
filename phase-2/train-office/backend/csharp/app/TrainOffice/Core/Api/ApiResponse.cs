@@ -4,8 +4,13 @@ namespace TrainOffice.Core.Api;
 
 public class ApiResponse<T>
 {
+    [JsonPropertyName("Data")]
     public T? Data { get; set; }
+
+    [JsonPropertyName("Errors")]
     public List<ApiError>? Errors { get; set; }
+
+    [JsonPropertyName("Meta")]
     public Meta? Meta { get; set; }
 
     public ApiResponse(T data)
