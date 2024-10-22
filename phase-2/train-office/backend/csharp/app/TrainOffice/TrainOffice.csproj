@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DisableExportScript>false</DisableExportScript>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
 
-  <Target Name="RunExportScript" AfterTargets="AfterBuild">
+  <Target Name="RunExportScript" AfterTargets="AfterBuild" Condition="'$(DisableExportScript)' != 'true'">
     <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)\..\..\export-files-structure.ps1&quot;" />
   </Target>
 

@@ -28,19 +28,17 @@ builder.Services.AddControllers();
 builder.Services.AddTrainOfficeCors(configuration);
 
 builder.Services.AddHttpContextAccessor();
+if (configuration["App:Urls"] != null)
+    builder.WebHost.UseUrls(configuration["App:Urls"] ?? "http://*:7000");
 
 var app = builder.Build();
 
 app.SeedInMemoryDb(configuration);
 app.MigrateDatabase(configuration);
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    // Serve the OpenAPI/Swagger documents
-    app.UseOpenApi(); // Serves the registered OpenAPI/Swagger documents by default on /swagger/v1/swagger.json
-    app.UseSwaggerUi(); // Serves the Swagger UI on /swagger
-}
+// Serve the OpenAPI/Swagger documents
+app.UseOpenApi(); // Serves the registered OpenAPI/Swagger documents by default on /swagger/v1/swagger.json
+app.UseSwaggerUi(); // Serves the Swagger UI on /swagger
 
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -48,7 +46,9 @@ app.UseRouting();
 app.UseCustomMiddlewares();
 
 app.MapControllers();
-app.UseCors(configuration["CORS:PolicyName"]);
+if (configuration["CORS:PolicyName"] != null)
+    app.UseCors(configuration["CORS:PolicyName"]);
+
 app.Run();
 
 // needed for use WebApplicationFactory in http tests
