@@ -58,4 +58,84 @@ describe('AssertionActionService', () => {
             expect(response.status).toBe('Success');
         });
     });
+
+    it('should return false when all mandatory fields are missing', () => {
+        const claimsInfos: ClaimsInfos = {};
+
+        const response = service.getAssertionActionResponse(
+            { isClaimsRequired: true },
+            claimsInfos,
+            'test@example.com'
+        );
+
+        expect(response.status).toBe('Error');
+    });
+
+    it('should return false when fields are empty strings', () => {
+        const claimsInfos: ClaimsInfos = {
+            email: '',
+            userName: '',
+            firstName: '',
+            lastName: ''
+        };
+
+        const response = service.getAssertionActionResponse(
+            { isClaimsRequired: true },
+            claimsInfos,
+            'test@example.com'
+        );
+
+        expect(response.status).toBe('Error');
+    });
+
+    it('should return false when some fields are undefined', () => {
+        const claimsInfos: ClaimsInfos = {
+            email: 'test@example.com',
+            userName: undefined,
+            firstName: 'test',
+            lastName: undefined
+        };
+
+        const response = service.getAssertionActionResponse(
+            { isClaimsRequired: true },
+            claimsInfos,
+            'test@example.com'
+        );
+
+        expect(response.status).toBe('Error');
+    });
+
+    it('should return false when email and username are null', () => {
+        const claimsInfos: ClaimsInfos = {
+            email: null,
+            userName: null,
+            firstName: 'John',
+            lastName: 'Doe'
+        };
+
+        const response = service.getAssertionActionResponse(
+            { isClaimsRequired: true },
+            claimsInfos,
+            'test@example.com'
+        );
+
+        expect(response.status).toBe('Error');
+    });
+
+    it('should return false when firstName is empty and lastName is null', () => {
+        const claimsInfos: ClaimsInfos = {
+            email: 'test@example.com',
+            userName: 'testuser',
+            firstName: '',
+            lastName: null
+        };
+
+        const response = service.getAssertionActionResponse(
+            { isClaimsRequired: true },
+            claimsInfos,
+            'test@example.com'
+        );
+
+        expect(response.status).toBe('Error');
+    });
 });
