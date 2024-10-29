@@ -38,7 +38,10 @@ describe('AssertionActionService', () => {
             const response = service.getAssertionActionResponse(request, claimsInfos, requestedEmail);
 
             expect(response.status).toBe('Error');
-            expect(response.message).toBe('The mandatory claims are not correctly configured in the identity provider');
+            expect(response.message).toBe(
+                'The following mandatory claims are not correctly configured in the identity provider: ' +
+                'email (UNDEFINED), userName (UNDEFINED), firstName (UNDEFINED), lastName (UNDEFINED)'
+            );
         });
 
         it('should return success when claims are required and configured correctly', () => {
