@@ -30,3 +30,25 @@
 1. Vérifier que tous les tests passent
 2. Vérifier la couverture de code
 3. Revue de code finale
+
+## 4. Finalisation de AssertionActionService.ts
+
+1. Compléter la validation des claims:
+   - Vérifier que le format de l'email est valide
+   - Ajouter des messages d'erreur plus descriptifs
+   - Gérer les cas limites (espaces, caractères spéciaux)
+
+2. Améliorer la gestion des erreurs:
+   - Ajouter des codes d'erreur spécifiques
+   - Enrichir les messages de log
+   - Centraliser les messages d'erreur
+
+3. Optimiser les performances:
+   - Mettre en cache les résultats de validation
+   - Réduire les allocations mémoire
+   - Minimiser les itérations
+
+4. Documentation et maintenance:
+   - Ajouter des commentaires JSDoc
+   - Documenter les cas d'erreur
+   - Préparer pour les évolutions futures
