@@ -15,7 +15,6 @@
 1. Extraire la logique de validation dans des fonctions séparées:
    - validateClaimsRequirement()
    - validateClaimsContent()
-   - validateEmailMatch()
 
 2. Simplifier la méthode principale:
    - Utiliser early returns

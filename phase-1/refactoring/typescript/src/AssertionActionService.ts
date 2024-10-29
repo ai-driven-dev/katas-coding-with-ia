@@ -48,28 +48,15 @@ export class AssertionActionService implements IAssertionActionService {
     }
 
     private validateMandatoryClaims(claimsInfos: ClaimsInfos, requestedEmail: string): boolean {
-        let claimsIsValid = true;
-
-        if (!claimsInfos.email) {
-            this.logger.warn(`The claim email is not correctly configured in the identity provider for this user ${requestedEmail}`);
-            claimsIsValid = false;
+        const requiredClaims = ['email', 'userName', 'firstName', 'lastName'];
+        let allClaimsValid = true;
+        for (const claim of requiredClaims) {
+            if (claimsInfos[claim as keyof ClaimsInfos] === undefined || claimsInfos[claim as keyof ClaimsInfos] === null || claimsInfos[claim as keyof ClaimsInfos] === '') {
+                this.logger.warn(`The claim ${claim} is not correctly configured in the identity provider for this user ${requestedEmail}`);
+                allClaimsValid = false;
+            }
         }
 
-        if (!claimsInfos.userName) {
-            this.logger.warn(`The claim userName is not correctly configured in the identity provider for this user ${requestedEmail}`);
-            claimsIsValid = false;
-        }
-
-        if (!claimsInfos.firstName) {
-            this.logger.warn(`The claim firstName is not correctly configured in the identity provider for this user ${requestedEmail}`);
-            claimsIsValid = false;
-        }
-
-        if (!claimsInfos.lastName) {
-            this.logger.warn(`The claim lastName is not correctly configured in the identity provider for this user ${requestedEmail}`);
-            claimsIsValid = false;
-        }
-
-        return claimsIsValid;
+        return allClaimsValid;
     }
 }
