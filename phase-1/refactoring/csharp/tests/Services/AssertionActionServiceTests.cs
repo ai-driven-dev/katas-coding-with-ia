@@ -7,6 +7,13 @@ namespace RefactoringTests.Services;
 //TODO add missing tests. Use theories if needed.
 public class AssertionActionServiceTests
 {
+    private readonly AssertionActionService _service;
+
+    public AssertionActionServiceTests()
+    {
+        _service = new AssertionActionService(NullLogger<AssertionActionService>.Instance);
+    }
+
     [Fact]
     public void Instanciate_AssertionActionService()
     {
@@ -65,5 +72,26 @@ public class AssertionActionServiceTests
         var response = service.GetAssertionActionResponse(request, claimsInfos, "test@test.fr");
 
         Assert.Equal(AssertionActionStatus.Success, response.Status);
+    }
+
+    [Theory]
+    [InlineData("", "username", "firstname", "lastname")]
+    [InlineData("email@test.com", "", "firstname", "lastname")]
+    [InlineData("email@test.com", "username", "", "lastname")]
+    [InlineData("email@test.com", "username", "firstname", "")]
+    public void InvalidAssertion_WithSpecificClaimMissing(string email, string username, string firstname, string lastname)
+    {
+        var request = new AssertionConsumerServiceRequest { IsClaimsRequired = true };
+        var claimsInfos = new ClaimsInfos
+        {
+            Email = email,
+            UserName = username,
+            FirstName = firstname,
+            LastName = lastname
+        };
+
+        var response = _service.GetAssertionActionResponse(request, claimsInfos, "test@test.com");
+
+        Assert.Equal(AssertionActionStatus.Error, response.Status);
     }
 }
