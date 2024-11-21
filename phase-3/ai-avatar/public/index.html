@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Avatar Console</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-header {
+      background: #007bff;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.2em;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      list-style-type: none;
+      margin: 0;
+    }
+    .chat-messages li {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      background: #f1f1f1;
+    }
+    .chat-form {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    .chat-form input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 0;
+      outline: none;
+    }
+    .chat-form button {
+      padding: 15px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .chat-form button:hover {
+      background: #0056b3;
+    }
+    .mode-selection {
+      display: flex;
+      justify-content: center;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    .mode-selection label {
+      margin-right: 10px;
+    }
+    .instruction {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #007bff;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">AI-Avatar Console</div>
+    <div class="mode-selection">
+      <label><input type="radio" name="mode" value="searchArticles" checked> Recherche d'articles</label>
+      <label><input type="radio" name="mode" value="chatbot"> Chatbot</label>
+    </div>
+    <form id="messageForm" class="chat-form">
+      <input id="messageInput" autocomplete="off" placeholder="Entrez votre message..." />
+      <button>Envoyer</button>
+    </form>
+    <ul id="messages" class="chat-messages"></ul>
+  </div>
+  <div class="instruction">
+    <p>Chercher un article sur les salaires ou les développeurs</p>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const form = document.getElementById('messageForm');
+    const input = document.getElementById('messageInput');
+    const messages = document.getElementById('messages');
+    const modeSelection = document.querySelector('.mode-selection');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const selectedMode = document.querySelector('input[name="mode"]:checked').value;
+      if (input.value) {
+        socket.emit('userMessage', { message: input.value, mode: selectedMode });
+        input.value = '';
+      }
+    });
+
+    socket.on('botMessage', (message) => {
+      const item = document.createElement('li');
+      item.textContent = message;
+      messages.appendChild(item);
+      messages.scrollTop = messages.scrollHeight;
+    });
+  </script>
+</body>
+</html>
