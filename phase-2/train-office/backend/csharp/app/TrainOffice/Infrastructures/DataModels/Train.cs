@@ -25,7 +25,7 @@ public enum CoachType
 {
     FirstClass,
     SecondClass,
-    DiningCar
+    DiningCar,
 }
 
 public class Seat
@@ -35,4 +35,20 @@ public class Seat
     public bool IsOccupied { get; set; }
     public int CoachId { get; set; }
     public Coach Coach { get; set; }
+}
+
+public class Speed
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Value { get; set; }
+    public List<Train> Trains { get; set; }
+}
+
+public class Weather
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Value { get; set; }
+    public List<Train> Trains { get; set; }
 }
