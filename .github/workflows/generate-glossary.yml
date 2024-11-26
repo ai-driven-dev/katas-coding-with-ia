@@ -34,4 +34,5 @@ jobs:
         git checkout -b "Change-documentation-$last_commit_hash"
         git add phase-2/train-office/backend/csharp/glossary.md
         git commit -m "Update glossary"
-        git push
+        git push --set-upstream origin "Change-documentation-$last_commit_hash"
+
