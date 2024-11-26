@@ -25,7 +25,7 @@ public enum CoachType
 {
     FirstClass,
     SecondClass,
-    DiningCar
+    DiningCar,
 }
 
 public class Seat
