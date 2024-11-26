@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -31,8 +35,20 @@ jobs:
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         last_commit_hash=$(git rev-parse --short HEAD)
-        git checkout -b "Change-documentation-$last_commit_hash"
+        branch_name="Change-documentation-$last_commit_hash"
+        git checkout -b "$branch_name"
         git add phase-2/train-office/backend/csharp/glossary.md
         git commit -m "Update glossary"
-        git push --set-upstream origin "Change-documentation-$last_commit_hash"
+        git push --set-upstream origin "$branch_name"
+        echo "branch_name=$branch_name" >> $GITHUB_ENV
 
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Update glossary"
+        title: "Update glossary"
+        body: "This PR updates the glossary based on changes in the DataModels directory."
+        branch: ${{ env.branch_name }}
+        base: "main"  # Replace with your default branch if different
