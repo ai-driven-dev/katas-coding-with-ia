@@ -1,0 +1,38 @@
+name: Generate Glossary
+
+on:
+  push:
+    paths:
+      - 'phase-2/train-office/backend/csharp/app/TrainOffice/Infrastructures/DataModels/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Generate Glossary
+      run: |
+        python phase-2/train-office/backend/csharp/generate_glossary.py --data_models_dir phase-2/train-office/backend/csharp/app/TrainOffice/Infrastructures/DataModels --glossary_file phase-2/train-office/backend/csharp/glossary.md
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        last_commit_hash=$(git rev-parse --short HEAD)
+        git checkout -b "Change-documentation-$last_commit_hash"
+        git add phase-2/train-office/backend/csharp/glossary.md
+        git commit -m "Update glossary"
+        git push
